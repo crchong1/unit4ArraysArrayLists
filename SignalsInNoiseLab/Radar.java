@@ -31,23 +31,20 @@ public class Radar
      * @param   rows    the number of rows in the radar grid
      * @param   cols    the number of columns in the radar grid
      */
-    public Radar(int rows, int cols)
+    public Radar(int rows, int cols, int monsterLocationRow, int monsterLocationCol)
     {
         // initialize the currentScan 2D array and the accumulator 2D array
         
-        
-        //
-        // !!! add code here !!!
-        //
-        
+        this.accumulator = new int[rows][cols];
+        this.currentScan = new boolean [rows][cols];
         
         // randomly set the location of the monster (can be explicity set through the
         //  setMonsterLocation method for the unit test
-        monsterLocationRow = (int)(Math.random() * rows);
-        monsterLocationCol = (int)(Math.random() * cols);
+        this.monsterLocationRow = monsterLocationRow;
+        this.monsterLocationCol = monsterLocationCol;
         
-        noiseFraction = 0.05;
-        numScans= 0;
+       
+        this.numScans= numScans;
     }
     
     /**
@@ -63,11 +60,27 @@ public class Radar
         //    4. update the accumulator 2D array based on the state of the currentScan 2D array
         //    5. increment the numScans instance variable
         
+        for (int i = 0; i< currentScan.length; i++)
+        {
+            for (int j = 0; j< currentScan[i].length; j++)
+            {
+                currentScan[i][j] = false;
+            }
+        }
+        setMonsterLocation(monsterLocationRow, monsterLocationCol);
+        injectNoise();
         
-        //
-        // !!! add code here !!!
-        //
-        
+        for(int i = 0; i < currentScan.length; i++)
+        {
+            for(int j = 0; j < currentScan[i].length; j++)
+            {
+                if (currentScan[i][j] == true)
+                {
+                    accumulator[i][j] = accumulator[i][j] + 1;
+                }
+            }
+        }
+        this.numScans++;
         
     }
 
@@ -91,7 +104,7 @@ public class Radar
      /**
      * Sets the probability that a given cell will generate a false detection
      * 
-     * @param   fraction    the probability that a given cell will generate a flase detection expressed
+     * @param   fraction    the probability that a given cell will generate a false detection expressed
      *                      as a fraction (must be >= 0 and < 1)
      */
     public void setNoiseFraction(double fraction)
@@ -166,10 +179,18 @@ public class Radar
         // detected as a false positive. Use the Math.random method to determine if each cell should be set
         // as a false positive.
         
+        for (int i = 0; i< this.currentScan.length; i++)
+        {
+            for (int j = 0; j< this.currentScan[i].length; j++)
+            {
+                double rand = Math.random();
+                if(rand < this.noiseFraction)
+                {
+                      this.currentScan[i][j] = true;
+                }
+            }
+        }
         
-        //
-        // !!! add code here !!!
-        //
         
         
     }
